@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html> 
+<body>
+
+<title> Generate CSV </title>
+<div class="container">
+  <div class="row">
+    <div class="span4">
+      <h5>Check boxes to include attributes on CSV file:</h5>
+      <br>
+      <div class="well">
+
+      <%= form_tag("/csv/createcsv_all", :method=>"post", :name =>'check_form') do %>
+        <% @arr = []%>
+
+        
+
+        <!-- Checks if fields[] is empty -->
+        <% if !@fields.empty? && !@fields.nil? %>
+          <p><%= check_box_tag "field_check", "field_check", false, id:"field_check" %><label for="field_check"><font color="#2bbbad"><b>Fields</b></font></label></p>
+          <% @keyvalue = [] %>
+          <% @fields.each_with_index do |(k, v), index| %>
+            <% @keyvalue.push("#{k}") %>
+            <% @fields.delete("custom_fields")  %>
+
+            <%= check_box_tag "arr[]", "#{k}", false, id:"field_#{index}", class:"filled-in" %>
+
+            <!-- display the exact field name instead of using 'label_tag' -->
+            <label for="<%= "field_#{index}" %>"> 
+                <%= "#{k}" %>
+            </label>
+
+            <br>
+          <% end %>
+        <% end %>
+
+
+        
+        <!-- Checks if custom_fields[] is empty -->
+        <% if !@custom_fields.empty? && !@custom_fields.nil? %>
+          <p><%= check_box_tag "custom_check", "custom_check", false, id:"custom_check" %><label for="custom_check"><b><font color="#2bbbad">Custom Fields</font></b></label></p>
+  	     	<% @names = [] %>
+          <% @values = []%>
+          <% @custom_fields.each_with_index do |cf, index| %>
+            <% @cfname = cf['name'].gsub(/\s+/, '_') %>
+            <% @cfvalue = cf['value']%>
+  		      <% @names.push(cf['name']) %>
+            <% @values.push(cf['value'])%>
+
+            <%= check_box_tag "cf_arr[]", "#{@cfname}", false, id:"custom_#{index}", class:"filled-in" %>
+            
+            <!-- display the exact field name instead of using 'label_tag' -->
+            <label for="<%= "custom_#{index}" %>"> 
+                <%= "#{@cfname}" %>
+            </label>
+
+            <br>
+          <% end %>
+	      <% end %>
+
+        
+        <%= hidden_field_tag 'url', @location_url%>
+        <%= hidden_field_tag 'company', @company %>
+        <%= hidden_field_tag 'key', @key %>
+        <%= hidden_field_tag 'headers', @keyvalue %>
+        <%= hidden_field_tag 'per_page', @per_page%>
+        <%= hidden_field_tag 'library', @library%>
+
+        <br><br>
+        <div class="row">
+          <div class='col s2'>
+            <%= submit_tag("Download", :class=>"btn") %>
+          </div>          
+ 		     <% end %>
+          <div class='col s2'>
+            <%= button_to 'Back', { action: 'form' }, { class: "btn" } %>
+          </div>
+        </div>
+     
+      </div> 
+    </div> 
+  </div> 
+</div> 
+
+</body>
+</html>

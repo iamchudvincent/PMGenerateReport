@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html> 
+<head>
+<title> Generate CSV </title>
+</head>
+
+<body >
+<div class="container">
+ 
+  <% if flash[:error] %>
+    <%= javascript_tag do %>
+      var error = "<%= flash[:error] %>";
+      Materialize.toast(error, 2600000); 
+    <% end %>
+  <% end %>
+
+  <div class="row">
+    <div class="span4">
+      <h4>Generate CSV</h4><br>
+      <div class="well">
+    
+    <%= form_tag("/csv/create", :method=>"post") do %>
+
+          <div class="input-field">
+              <%= label_tag(:lblurl, "URL") %>
+              <%= url_field_tag(:url, nil, :readonly=>true, :value => 'http://service.twistage.com') %>
+          </div>
+
+          <div class="input-field">
+            <%= label_tag(:lblcompany, "COMPANY") %>
+            <%= text_field_tag(:company, nil, :required => true, :value => params[:company], :class=>"validate") %>
+          </div>
+
+          <div class="input-field">
+            <%= label_tag(:lblperpage, "PER PAGE") %>
+            <%= number_field_tag 'perpage', '100', max: 100 %>
+          </div>
+
+          <div class="input-field">
+            <%= label_tag(:lblkey, "KEY") %>
+            <%= text_field_tag(:key, nil, :required => true, :value => params[:key]) %>
+          </div>
+
+          <div class="input-field">
+            <%= label_tag(:lbllibrary, "LIBRARY") %>
+            <%= text_field_tag(:library, nil, :required => false, :value => params[:library]) %>     
+          </div>
+
+          <br><br>
+          <%= submit_tag("Display", :class=>"btn", :onload=>"Materialize.toast('Hallo World', 4000)") %>
+      <% end %>
+
+      <p></p>
+
+      </div> 
+    </div> 
+  </div> 
+</div> 
+
+
+</body>
+</html>
